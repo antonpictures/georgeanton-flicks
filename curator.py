@@ -648,6 +648,35 @@ def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
     return True
 
 
+def ingest_urls(cat: dict[str, Movie], path: str, deep: bool = False) -> int:
+    """Feed Alice a list of YouTube URLs — e.g. "Copy link" from his iPhone
+    YouTube app (Free Movies Daily catalog). One URL per line."""
+    added = 0
+    n = 0
+    for raw in open(path, encoding="utf-8"):
+        u = raw.strip()
+        if not u or u.startswith("#"):
+            continue
+        m = re.search(r"v=([A-Za-z0-9_-]{11})", u)
+        if not m:
+            continue
+        vid = m.group(1)
+        d = yt_json(["--no-warnings", "--no-update", "--skip-download",
+                     "--flat-playlist", "-J", "--playlist-end", "1", u], 120)
+        title = (d or {}).get("title") or u
+        dur = int((d or {}).get("duration") or 0)
+        if dur and not (MIN_SECONDS <= dur <= MAX_SECONDS):
+            continue
+        src = "Free Movies Daily" if "FEstorefront" in u or "fmd" in u.lower() else "iPhone catalog"
+        if add_movie(cat, vid, title, src, dur, deep=deep):
+            m2 = cat[vid]
+            print(f"  + {m2.title} ({m2.year or '?'}) [{dur//60}m]", flush=True)
+            added += 1
+        n += 1
+    print(f"processed {n} URLs", flush=True)
+    return added
+
+
 def ingest_titles(cat: dict[str, Movie], path: str, deep: bool = False) -> int:
     """George's wishlist: a list of film titles, one per line. For each, search
     YouTube and add the best full-movie upload we can find."""
@@ -829,6 +858,16 @@ def main() -> None:
         done = region_scan(cat, n)
         save(cat)
         print(f"region-scan {done} films", flush=True)
+        return
+
+    if "--urls" in argv:
+        i = argv.index("--urls")
+        path = argv[i + 1] if len(argv) > i + 1 else None
+        if not path:
+            print("--urls needs a file"); return
+        n = ingest_urls(cat, path, deep=deep)
+        save(cat)
+        print(f"added {n} from URL list · library {len(cat)}", flush=True)
         return
 
     if "--titles" in argv:
