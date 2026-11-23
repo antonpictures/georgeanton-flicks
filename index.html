@@ -188,11 +188,13 @@ const mins = s => s ? Math.round(s / 60) + 'm' : '';
 
 // YouTube thumbnails: mqdefault is the reliable 16:9 one; try the big ones first.
 const YTImg = (id, name) => `https://i.ytimg.com/vi/${id}/${name}.jpg`;
+// Best first. YouTube often serves maxresdefault as a 120x90 GREY placeholder
+// with HTTP 200 (not a 404!), so onerror never fires — we must check width too.
 const THUMBS = ['maxresdefault', 'sddefault', 'hqdefault', 'mqdefault'];
-function posterStep(img, id){
+function nextThumb(img, id){
   const i = Number(img.dataset.step || 0) + 1;
   if (i >= THUMBS.length){
-    img.onerror = null; img.style.display = 'none';
+    img.onerror = img.onload = null; img.style.display = 'none';
     const t = img.parentElement;
     if (t && !t.querySelector('.placeholder')){
       const p = document.createElement('div');
@@ -204,7 +206,21 @@ function posterStep(img, id){
     return;
   }
   img.dataset.step = i;
+  img.onerror = () => nextThumb(img, id);
+  img.onload = () => { if (img.naturalWidth < 300) nextThumb(img, id); };
   img.src = YTImg(id, THUMBS[i]);
+}
+// called from the inline onerror on the first (maxresdefault) image
+function posterStep(img, id){ nextThumb(img, id); }
+// also check already-loaded images for the tiny grey placeholder
+function sweepThumbs(){
+  document.querySelectorAll('#grid .thumb img').forEach(img => {
+    if (img.complete && img.naturalWidth > 0 && img.naturalWidth < 300 && !img.dataset.swept){
+      img.dataset.swept = '1';
+      img.dataset.step = '0';
+      nextThumb(img, img.getAttribute('alt') ? (img.closest('.card')?.dataset.id) : '');
+    }
+  });
 }
 
 function playable(m){ return m.status === 'ok' || m.status === 'restricted'; }
@@ -274,6 +290,7 @@ function render(){
     c.onclick = () => openFilm(CAT.find(m => m.id === c.dataset.id));
   });
   paintVotes();
+  setTimeout(sweepThumbs, 1200);
 }
 
 function paintVotes(){
