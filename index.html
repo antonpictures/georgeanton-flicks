@@ -58,6 +58,8 @@
   .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s}
   .card:hover .thumb img{filter:brightness(1.12)}
   .dead .thumb img{filter:grayscale(1) brightness(.5)}
+  .downvoted{opacity:.62}
+  .downvoted .thumb img{filter:grayscale(.8) brightness(.6)}
   .flag{position:absolute;top:7px;left:7px;font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;
     background:rgba(0,0,0,.82);border-radius:4px;padding:3px 6px;color:#e8e8ea}
   .flag.bad{background:rgba(229,9,20,.9)}
@@ -224,7 +226,7 @@ function sweepThumbs(){
 }
 
 function playable(m){ return m.status === 'ok' || m.status === 'restricted'; }
-function visible(m){ return m.status !== 'fake' && m.status !== 'removed'; }
+function visible(m){ return m.status !== 'removed'; }
 
 function pickFeatured(){
   const ok = CAT.filter(m => playable(m) && m.status !== 'fake');
@@ -250,7 +252,9 @@ function showFeature(){
 
 function card(m){
   const dead = !playable(m);
-  return `<article class="card ${dead?'dead':''}" data-id="${m.id}">
+  const v = (VOTES.votes||{})[m.id] || {ok:0,fake:0};
+  const down = (v.fake||0) > (v.ok||0);
+  return `<article class="card ${dead?'dead':''} ${down?'downvoted':''}" data-id="${m.id}">
     <div class="thumb">
       <img src="${YTImg(m.id,'maxresdefault')}" alt="${esc(m.title)}" onerror="posterStep(this,'${m.id}')">
       ${m.status === 'ok' ? '' : `<span class="flag bad">${esc(m.status)}</span>`}
@@ -273,8 +277,14 @@ function filtered(){
   let rows = CAT.filter(visible);
   if (Q) rows = rows.filter(m => (m.title+' '+(m.source||'')+' '+(m.genres||[]).join(' '))
     .toLowerCase().includes(Q));
-  // newest and most-recently-added first, then alphabetical
-  rows.sort((a,b) => (b.year||0)-(a.year||0) || (b.added_at||0)-(a.added_at||0)
+  // Viewer-driven ranking: one FAKE sinks a title to the bottom, OK lifts it.
+  // Then newest / most-recently-added, then alphabetical.
+  const score = m => {
+    const v = (VOTES.votes||{})[m.id] || {ok:0,fake:0};
+    return (v.ok||0) - (v.fake||0)*1000;
+  };
+  rows.sort((a,b) => score(b)-score(a)
+    || (b.year||0)-(a.year||0) || (b.added_at||0)-(a.added_at||0)
     || a.title.localeCompare(b.title));
   return rows;
 }
@@ -349,9 +359,8 @@ document.addEventListener('click', async e => {
       const c = w.querySelector('.v-count');
       if (c) c.textContent = `✓${d.votes.ok||0} ✗${d.votes.fake||0}`;
       w.querySelectorAll('button').forEach(x => { x.disabled = true; x.style.opacity='.4'; x.style.cursor='default'; });
-      if (vote === 'fake' && (d.votes.fake||0) >= (d.votes.ok||0)+1){
-        const card = w.closest('.card'); if (card) card.classList.add('dead');
-      }
+      // re-render so a downvoted title drops to the bottom immediately
+      if (vote === 'fake') setTimeout(render, 400);
     } else if (d.reason === 'already voted'){
       w.querySelectorAll('button').forEach(x => { x.disabled = true; x.style.opacity='.4'; x.style.cursor='default'; });
     }

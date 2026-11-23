@@ -142,22 +142,23 @@ class Handler(SimpleHTTPRequestHandler):
             entry = v["votes"].setdefault(vid, {"ok": 0, "fake": 0})
             entry[vote] = entry.get(vote, 0) + 1
             already.append(ip)
-            # If a film gets marked fake, hide it and learn the channel.
-            if vote == "fake" and entry["fake"] >= entry["ok"] + 1:
+            # A FAKE vote is a ranking signal, not a deletion: the film stays
+            # in the library but sinks to the bottom of the shelf. Alice also
+            # learns the uploader so she stops adding more from it.
+            if vote == "fake":
+                if vid not in v["rejected_ids"]:
+                    v["rejected_ids"].append(vid)
+                ch = None
                 try:
                     rows = json.loads(CATALOG.read_text(encoding="utf-8"))
                     for m in rows:
                         if m.get("id") == vid:
-                            m["status"] = "fake"
                             ch = m.get("source")
-                            if ch and ch not in v["rejected_channels"]:
-                                v["rejected_channels"].append(ch)
-                    if vid not in v["rejected_ids"]:
-                        v["rejected_ids"].append(vid)
-                    CATALOG.write_text(json.dumps(rows, ensure_ascii=False, indent=2),
-                                       encoding="utf-8")
+                            break
                 except Exception:  # noqa: BLE001
                     pass
+                if ch and ch not in v["rejected_channels"]:
+                    v["rejected_channels"].append(ch)
             save_votes(v)
             return self._json({"ok": True, "votes": v["votes"].get(vid, {})})
         if path == "/api/refresh":

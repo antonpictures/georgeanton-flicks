@@ -606,8 +606,9 @@ def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
     _v = load_votes()
     if vid in (_v.get("rejected_ids") or []):
         return False
-    if source in (_v.get("rejected_channels") or []):
-        return False
+    # rejected channels stay in the library (they just rank low); only skip
+    # them if the single-vote source is being re-added from scratch.
+    # (Left visible on purpose — George wants trash sunk, not deleted.)
     if duration and not (MIN_SECONDS <= duration <= MAX_SECONDS):
         return False
     if JUNK.search(raw_title):

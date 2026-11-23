@@ -51,6 +51,14 @@
     "QKOezO8yNdo": {
       "ok": 0,
       "fake": 1
+    },
+    "HnKU2tCR_s8": {
+      "ok": 1,
+      "fake": 0
+    },
+    "cqIZfoI37OE": {
+      "ok": 0,
+      "fake": 1
     }
   },
   "rejected_ids": [
@@ -60,7 +68,8 @@
     "S1HyTSBNALU",
     "D0A36083JOU",
     "5G5zqjDW20E",
-    "QKOezO8yNdo"
+    "QKOezO8yNdo",
+    "cqIZfoI37OE"
   ],
   "rejected_channels": [
     "wishlist",
@@ -90,6 +99,12 @@
     ],
     "QKOezO8yNdo": [
       "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
+    ],
+    "HnKU2tCR_s8": [
+      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
+    ],
+    "cqIZfoI37OE": [
+      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
     ]
   }
 }
