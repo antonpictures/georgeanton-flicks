@@ -98,6 +98,7 @@ class Movie:
     notes: str = ""
     regions: list[str] = field(default_factory=list)   # countries where it plays
     region_checked: float = 0.0
+    poster: str | None = None
 
 
 # === plumbing =============================================================
@@ -281,6 +282,7 @@ def wiki_page(page: str) -> dict | None:
     if m:
         year = int(m.group(0))
     box = wiki_infobox(d.get("title", page))
+    poster = (d.get("originalimage") or {}).get("source") or (d.get("thumbnail") or {}).get("source")
     return {
         "title": re.sub(r"\s*\((?:19|20)\d{2}[^)]*film\)|\s*\(film\)$", "",
                         d.get("title", page)).strip(),
@@ -288,6 +290,7 @@ def wiki_page(page: str) -> dict | None:
         "extract": extract[:300],
         "genres": box.get("genres", []),
         "runtime": box.get("runtime"),
+        "poster": poster,
         "url": d.get("content_urls", {}).get("desktop", {}).get("page", ""),
     }
 
@@ -368,9 +371,38 @@ def identify(raw_title: str, source: str) -> dict:
 
     wiki = wiki_lookup(guess)
     if wiki:
+        raw_words = {w for w in re.findall(r"[a-z]{3,}", raw_title.lower())}
+        wiki_words = {w for w in re.findall(r"[a-z]{3,}", wiki["title"].lower())}
+        overlap = len(raw_words & wiki_words)
+        raw_year = None
+        ym = re.search(r"(19|20)\d{2}", raw_title)
+        if ym:
+            raw_year = int(ym.group(0))
+        # A real film has to be nameable from the upload. If the years disagree
+        # (2026 upload vs. a 2025 film) or nothing overlaps, it is an AI fake
+        # wearing a real film's name -> keep the cleaned upload title.
+        if raw_year and wiki["year"] and abs(raw_year - wiki["year"]) > 1:
+            return {"title": clean_title(raw_title), "year": raw_year,
+                    "genres": [], "runtime": None, "poster": None,
+                    "confidence": 0.35, "notes": "unverified"}
+        # An upload that names a sequel number ("Jurassic World 6", "John Wick
+        # Chapter 5") that the real film does not have is an AI fake wearing
+        # a real franchise's name.
+        # Only small numbers count as sequel markers; years never do.
+        raw_digits = {d for d in re.findall(r"\b\d{1,3}\b", raw_title)}
+        wiki_digits = {d for d in re.findall(r"\b\d{1,3}\b", wiki["title"])}
+        if raw_digits and not (raw_digits & wiki_digits):
+            return {"title": clean_title(raw_title), "year": raw_year,
+                    "genres": [], "runtime": None, "poster": None,
+                    "confidence": 0.35, "notes": "unverified"}
+        if overlap < 2 and not (raw_words & wiki_words):
+            return {"title": clean_title(raw_title), "year": raw_year,
+                    "genres": [], "runtime": None, "poster": None,
+                    "confidence": 0.35, "notes": "unverified"}
         return {"title": wiki["title"], "year": wiki["year"],
                 "genres": wiki.get("genres", []), "runtime": wiki.get("runtime"),
-                "confidence": 0.95, "notes": f"wiki: {wiki['url']}"}
+                "poster": wiki.get("poster"), "confidence": 0.95,
+                "notes": f"wiki: {wiki['url']}"}
 
     # LLM fallback: only trusted to tidy the string, never to invent a film.
     prompt = (
