@@ -59,6 +59,10 @@
     "cqIZfoI37OE": {
       "ok": 0,
       "fake": 1
+    },
+    "faz_09o1i_8": {
+      "ok": 0,
+      "fake": 1
     }
   },
   "rejected_ids": [
@@ -69,7 +73,8 @@
     "D0A36083JOU",
     "5G5zqjDW20E",
     "QKOezO8yNdo",
-    "cqIZfoI37OE"
+    "cqIZfoI37OE",
+    "faz_09o1i_8"
   ],
   "rejected_channels": [
     "wishlist",
@@ -104,6 +109,9 @@
       "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
     ],
     "cqIZfoI37OE": [
+      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
+    ],
+    "faz_09o1i_8": [
       "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
     ]
   }

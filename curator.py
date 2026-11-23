@@ -355,6 +355,13 @@ def clean_title(raw: str) -> str:
                r"watch online|free|new|latest|official)\b", " ", t, flags=re.I)
     t = re.sub(r"\(?(19|20)\d{2}\)?", " ", t)
     t = re.sub(r"[•·—–:]+", " ", t)
+    # Search-bait: "Best <Actor> Action Movies Full Length English",
+    # "Action Movie 2020 -", "Full Length English" — uploaders stuff several
+    # film names into a title to catch every search. Strip the bait.
+    t = re.sub(r"\bbest\s+[\w'\- ]{2,40}?\s+(?:action\s+)?movies?\b.*$", " ", t, flags=re.I)
+    t = re.sub(r"^\s*(?:best\s+)?action\s+movie\b\s*(?:19|20)\d{2}?\s*[-–:]?\s*", " ", t, flags=re.I)
+    t = re.sub(r"^\s*action\s+movie\s*[-–:]\s*", " ", t, flags=re.I)
+    t = re.sub(r"\bfull\s+length\s+english\b", " ", t, flags=re.I)
     t = re.sub(r"\s{2,}", " ", t).strip(" -.,!")
     # Trim marketing tails ("… Ultimate Action Movie Vin Diesel")
     if len(t) > 34:
