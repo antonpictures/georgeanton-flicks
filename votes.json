@@ -271,6 +271,18 @@
     "EIjGf1Ydg6o": {
       "ok": 0,
       "fake": 2
+    },
+    "K____TjWigY": {
+      "ok": 0,
+      "fake": 1
+    },
+    "7QL5pOpGCt8": {
+      "ok": 0,
+      "fake": 1
+    },
+    "JnbQTDIHpJE": {
+      "ok": 0,
+      "fake": 1
     }
   },
   "rejected_ids": [
@@ -303,7 +315,10 @@
     "GcqdnbpmqYw",
     "Y2DijiP0rfw",
     "sx8pViXxZQg",
-    "EIjGf1Ydg6o"
+    "EIjGf1Ydg6o",
+    "K____TjWigY",
+    "7QL5pOpGCt8",
+    "JnbQTDIHpJE"
   ],
   "rejected_channels": [
     "wishlist",
