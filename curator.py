@@ -282,7 +282,8 @@ def wiki_page(page: str) -> dict | None:
         year = int(m.group(0))
     box = wiki_infobox(d.get("title", page))
     return {
-        "title": re.sub(r"\s*\((?:19|20)\d{2} film\)|\s*\(film\)$", "", d.get("title", page)).strip(),
+        "title": re.sub(r"\s*\((?:19|20)\d{2}[^)]*film\)|\s*\(film\)$", "",
+                        d.get("title", page)).strip(),
         "year": year,
         "extract": extract[:300],
         "genres": box.get("genres", []),
@@ -539,6 +540,20 @@ def save(cat: dict[str, Movie]) -> None:
     rows = [asdict(m) for m in cat.values()]
     rows.sort(key=lambda m: (-(m.get("year") or 0), m["title"].lower()))
     CATALOG.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def clean_source(src: str, title: str) -> str:
+    """Uploader names come back dirty (whole titles, pipe stacks, emoji)."""
+    s = (src or "").split("|")[0]
+    s = re.sub(r"[\U0001F000-\U0001FAFF\u2600-\u27BF]", "", s)
+    s = re.sub(r"/@", "", s).strip(" -·.,!")
+    if not s:
+        return "YouTube"
+    if len(s) > 30 or s.count("!") >= 3:
+        return "YouTube"
+    if title and s.lower()[:12] == title.lower()[:12]:
+        return "YouTube"
+    return s[:28]
 
 
 def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,

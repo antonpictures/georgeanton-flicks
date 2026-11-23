@@ -74,7 +74,7 @@ longest copy.
 `PORT=8099` overrides the port. The site's *"Ask her to crawl now"* button POSTs
 `/api/refresh`, which runs the curator in the background.
 
-## Status, 2026-11-22
+## Status, 2026-11-22 (final)
 
 - Working: shelf, catalog API, recommendation walk, channel ingest, Wikipedia identification,
   health checks, dedupe, background refresh from the UI.

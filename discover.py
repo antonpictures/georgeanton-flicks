@@ -212,9 +212,12 @@ def recommendations(data: dict) -> list[dict]:
 def load_channels() -> dict:
     if CHANNELS.exists():
         try:
-            return json.loads(CHANNELS.read_text(encoding="utf-8"))
+            data = json.loads(CHANNELS.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
-            pass
+            return {}
+        if isinstance(data, list):                    # on-disk shape is a list
+            return {c["handle"]: c for c in data if c.get("handle")}
+        return data
     return {}
 
 
@@ -228,7 +231,7 @@ def walk(seeds: list[str], depth: int = 2, max_videos: int = 80,
     cat = curator.load()
     channels = load_channels()
     queue = deque((vid, 0) for vid in seeds)
-    visited: set[str] = set(cat.keys())
+    visited: set[str] = set()   # pages fetched, not films owned
     added = 0
     pages = 0
 

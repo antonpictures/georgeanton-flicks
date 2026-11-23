@@ -208,7 +208,7 @@ function card(m){
   const dead = !playable(m);
   return `<article class="card ${dead ? 'dead' : ''}" data-id="${m.id}">
     <div class="thumb">
-      <img loading="lazy" src="${poster(m.id)}" alt="${esc(m.title)}"
+      <img src="${poster(m.id)}" alt="${esc(m.title)}"
            onerror="posterStep(this,'${m.id}')">
       ${m.status === 'ok' ? '' : `<span class="flag bad">${esc(m.status)}</span>`}
       ${m.duration ? `<span class="tick">${mins(m.duration)}</span>` : ''}
@@ -249,23 +249,19 @@ function render(){
   if (Q || VIEW !== 'all'){
     main.innerHTML = shelf(`${rows.length} result${rows.length === 1 ? '' : 's'}`, rows);
   } else {
-    const byDecade = {}, byGenre = {};
-    rows.forEach(m => {
-      const y = m.year || 0;
-      const dec = y ? `${Math.floor(y/10)*10}s` : 'Undated';
-      (byDecade[dec] ||= []).push(m);
-      (m.genres || []).forEach(g => (byGenre[g] ||= []).push(m));
-    });
-    const order = ['2020s','2010s','2000s','1990s','1980s','Undated'];
-    const decKeys = order.filter(k => byDecade[k] && byDecade[k].length)
-      .concat(Object.keys(byDecade).filter(k => !order.includes(k)));
-    const genreOrder = ['Action','Thriller','Crime','Horror','Sci-Fi','Drama','Adventure','Comedy','Mystery'];
-    const genKeys = genreOrder.filter(g => byGenre[g] && byGenre[g].length >= 3)
-      .concat(Object.keys(byGenre).filter(g => !genreOrder.includes(g) && byGenre[g].length >= 3));
+    const recent = rows.filter(m => (m.year || 0) >= 2025);
+    const mid = rows.filter(m => (m.year || 0) >= 2020 && (m.year || 0) < 2025);
+    const older = rows.filter(m => (m.year || 0) < 2020);
+    const byGenre = {};
+    rows.forEach(m => (m.genres || []).forEach(g => (byGenre[g] ||= []).push(m)));
+    const genreOrder = ['Action','Thriller','Crime','Horror','Sci-Fi','Drama','Adventure','Comedy','Mystery','Fantasy'];
+    const genKeys = genreOrder.filter(g => (byGenre[g] || []).length >= 4);
     main.innerHTML =
-      decKeys.slice(0, 2).map(k => shelf(k === '2020s' ? 'New — the 2020s' : `Films of the ${k}`, byDecade[k])).join('')
+      shelf('New this year & next', recent)
+      + shelf('2020s so far', mid)
       + genKeys.slice(0, 6).map(g => shelf(g, byGenre[g])).join('')
-      + decKeys.slice(2).map(k => shelf(`Films of the ${k}`, byDecade[k])).join('');
+      + shelf('Older films', older)
+      + shelf('Everything else', rows.filter(m => !m.year));
   }
   document.querySelectorAll('.card').forEach(c => {
     c.onclick = () => openFilm(CAT.find(m => m.id === c.dataset.id));
