@@ -648,6 +648,43 @@ def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
     return True
 
 
+def ingest_titles(cat: dict[str, Movie], path: str, deep: bool = False) -> int:
+    """George's wishlist: a list of film titles, one per line. For each, search
+    YouTube and add the best full-movie upload we can find."""
+    added = 0
+    lines = [l.strip() for l in open(path, encoding="utf-8") if l.strip()
+             and not l.strip().startswith("#")]
+    print(f"ingesting {len(lines)} requested titles", flush=True)
+    for title in lines:
+        # strip trailing year in parens for the search, keep it as a hint
+        hint_year = None
+        m = re.search(r"\((19|20)\d{2}\)", title)
+        if m:
+            hint_year = int(m.group(0).strip("()"))
+        q = title
+        d = yt_json(["--flat-playlist", "-J", f"ytsearch6:{q} full movie"], 120)
+        entries = (d or {}).get("entries") if isinstance(d, dict) else []
+        entries = [e for e in (entries or []) if e and e.get("id")]
+        # prefer the longest upload that is at least 20 min
+        entries.sort(key=lambda e: -(e.get("duration") or 0))
+        for e in entries[:3]:
+            vid = e.get("id"); raw = e.get("title") or title
+            dur = int(e.get("duration") or 0)
+            if not vid or dur < MIN_SECONDS:
+                continue
+            if add_movie(cat, vid, raw, "wishlist", dur, deep=deep):
+                m2 = cat[vid]
+                # honour the requested year if wiki didn't find one
+                if hint_year and not m2.year:
+                    m2.year = hint_year
+                print(f"  + {vid} · {m2.title} ({m2.year or '?'}) [{dur//60}m]", flush=True)
+                added += 1
+                if added % 5 == 0:
+                    save(cat)
+                break
+    return added
+
+
 def ingest(cat: dict[str, Movie], deep: bool, force_search: str | None = None) -> int:
     added = 0
     sources: list[tuple[str, list[dict]]] = []
@@ -792,6 +829,16 @@ def main() -> None:
         done = region_scan(cat, n)
         save(cat)
         print(f"region-scan {done} films", flush=True)
+        return
+
+    if "--titles" in argv:
+        i = argv.index("--titles")
+        path = argv[i + 1] if len(argv) > i + 1 else None
+        if not path:
+            print("--titles needs a file"); return
+        n = ingest_titles(cat, path, deep=deep)
+        save(cat)
+        print(f"added {n} from wishlist · library {len(cat)}", flush=True)
         return
 
     if "--reidentify" in argv:
