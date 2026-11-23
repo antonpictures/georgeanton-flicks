@@ -1,1 +1,56 @@
-{"votes": {}, "rejected_ids": [], "rejected_channels": []}
+{
+  "votes": {
+    "1AcyLkWXVGM": {
+      "ok": 1,
+      "fake": 0
+    },
+    "u67xqVUIqLU": {
+      "ok": 0,
+      "fake": 1
+    },
+    "HpEiqu5P3tM": {
+      "ok": 0,
+      "fake": 1
+    },
+    "7rr37xdVuq0": {
+      "ok": 1,
+      "fake": 0
+    },
+    "4G1j9przI5o": {
+      "ok": 4,
+      "fake": 0
+    },
+    "AwRqdtV-edI": {
+      "ok": 1,
+      "fake": 0
+    },
+    "sbhKAMe_Gzo": {
+      "ok": 0,
+      "fake": 1
+    },
+    "S1HyTSBNALU": {
+      "ok": 0,
+      "fake": 1
+    }
+  },
+  "rejected_ids": [
+    "u67xqVUIqLU",
+    "HpEiqu5P3tM",
+    "sbhKAMe_Gzo",
+    "S1HyTSBNALU"
+  ],
+  "rejected_channels": [
+    "wishlist"
+  ],
+  "voters": {
+    "AwRqdtV-edI": [
+      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
+    ],
+    "sbhKAMe_Gzo": [
+      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
+    ],
+    "S1HyTSBNALU": [
+      "127.0.0.1"
+    ]
+  }
+}

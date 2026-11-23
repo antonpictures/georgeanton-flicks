@@ -76,8 +76,9 @@
   .card .s{font-size:10.5px;color:var(--dim);margin-top:3px}
   .vote{display:flex;align-items:center;gap:4px;margin-top:6px;opacity:.7;transition:opacity .15s}
   .card:hover .vote{opacity:1}
-  .vote button{all:unset;cursor:pointer;font-size:9.5px;padding:2px 5px;border-radius:4px;
-    background:rgba(255,255,255,.08);color:#c9c9cf;transition:.15s;letter-spacing:.3px}
+  .vote button{all:unset;cursor:pointer;font-size:10px;padding:3px 7px;border-radius:4px;
+    background:rgba(255,255,255,.1);color:#c9c9cf;transition:.15s;letter-spacing:.3px;
+    touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .vote button:hover{background:rgba(255,255,255,.18)}
   .vote .v-ok:hover{color:#39d353}
   .vote .v-fake:hover{color:#e50914}
@@ -112,7 +113,11 @@
   #alice button{margin-top:8px;width:100%;background:#1f1f23;border:1px solid var(--line);
     color:#d4d4da;border-radius:6px;padding:6px 8px;font-size:11px;cursor:pointer;transition:.15s}
   #alice button:hover{background:#2a2a30;color:#fff}
-  @media(max-width:760px){#alice{display:none}}
+  @media(max-width:760px){
+    #alice{display:none}
+    .vote{opacity:1}
+    .vote button{font-size:12px;padding:6px 10px;min-height:32px;touch-action:manipulation}
+  }
   @media(max-width:760px){
     header{padding:12px 16px;gap:12px} nav{display:none}
     .hero{padding:0 18px 30px;height:auto;margin-top:52px}
@@ -171,7 +176,7 @@
   <div class="bar">
     <button id="veil-back" class="btn s" style="padding:8px 14px;font-size:13px">← Back to shelf</button>
     <h3 id="veil-title"></h3>
-    <div class="vote" id="veil-vote" style="opacity:1">
+    <div class="vote" id="veil-vote" style="opacity:1;gap:6px">
       <button class="v-ok" title="Real movie">✓ OK</button>
       <button class="v-fake" title="Fake / slideshow">✗ FAKE</button>
       <span class="v-count"></span>
@@ -416,10 +421,15 @@ document.addEventListener('click', async e => {
       VOTES.votes[id] = d.votes;
       const c = w.querySelector('.v-count');
       if (c) c.textContent = `✓${d.votes.ok||0} ✗${d.votes.fake||0}`;
+      w.querySelectorAll('button').forEach(b => { b.disabled = true; b.style.opacity = '.4'; b.style.cursor = 'default'; });
       if (vote === 'fake' && (d.votes.fake||0) >= (d.votes.ok||0)+1){
         const card = w.closest('.card');
         if (card) card.classList.add('dead');
       }
+    } else if (d.reason === 'already voted'){
+      w.querySelectorAll('button').forEach(b => { b.disabled = true; b.style.opacity = '.4'; b.style.cursor = 'default'; });
+      const c = w.querySelector('.v-count');
+      if (c && d.votes) c.textContent = `✓${d.votes.ok||0} ✗${d.votes.fake||0} (voted)`;
     }
   } catch {}
 });

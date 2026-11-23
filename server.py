@@ -41,7 +41,7 @@ def load_votes() -> dict:
             return json.loads(VOTES.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             pass
-    return {"votes": {}, "rejected_ids": [], "rejected_channels": []}
+    return {"votes": {}, "rejected_ids": [], "rejected_channels": [], "voters": {}}
 
 
 def save_votes(v: dict) -> None:
@@ -77,6 +77,14 @@ def run_curator() -> None:
         _refresh_state["last_log"] = f"curator failed: {e}"
     finally:
         _refresh_state.update(running=False, finished=time.time())
+
+
+def client_ip(self_handler) -> str:
+    for h in ("CF-Connecting-IP", "X-Forwarded-For", "X-Real-IP"):
+        v = self_handler.headers.get(h)
+        if v:
+            return v.split(",")[0].strip()
+    return self_handler.client_address[0] if self_handler.client_address else "unknown"
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -122,13 +130,18 @@ class Handler(SimpleHTTPRequestHandler):
                 body = {}
             vid = body.get("id")
             vote = body.get("vote")
-            if vid not in ("ok", "fake") and vote not in ("ok", "fake"):
-                return self._json({"ok": False, "reason": "bad vote"}, 400)
             if vote not in ("ok", "fake"):
                 return self._json({"ok": False, "reason": "bad vote"}, 400)
+            ip = client_ip(self)
             v = load_votes()
+            voters = v.setdefault("voters", {})
+            already = voters.setdefault(vid, [])
+            if ip in already:
+                return self._json({"ok": False, "reason": "already voted",
+                                   "votes": v["votes"].get(vid, {})}, 200)
             entry = v["votes"].setdefault(vid, {"ok": 0, "fake": 0})
             entry[vote] = entry.get(vote, 0) + 1
+            already.append(ip)
             # If a film gets marked fake, hide it and learn the channel.
             if vote == "fake" and entry["fake"] >= entry["ok"] + 1:
                 try:
