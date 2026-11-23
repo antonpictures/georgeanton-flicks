@@ -171,8 +171,11 @@
   <div class="bar">
     <button id="veil-back" class="btn s" style="padding:8px 14px;font-size:13px">← Back to shelf</button>
     <h3 id="veil-title"></h3>
-    <a href="https://github.com/antonpictures/youtube-punisher" target="_blank" rel="noopener"
-       class="btn s" style="padding:8px 14px;font-size:12px;text-decoration:none">🛡 Skip ads</a>
+    <div class="vote" id="veil-vote" style="opacity:1">
+      <button class="v-ok" title="Real movie">✓ OK</button>
+      <button class="v-fake" title="Fake / slideshow">✗ FAKE</button>
+      <span class="v-count"></span>
+    </div>
     <button id="veil-x" title="Close (Esc)">✕</button>
   </div>
   <div class="frame" id="frame"></div>
@@ -302,9 +305,15 @@ function render(){
 
 function openFilm(m){
   if (!m) return;
+  currentMovie = m;
   $('#veil-title').textContent = m.title + (m.year ? ` (${m.year})` : '');
   $('#frame').innerHTML = `<iframe src="https://www.youtube.com/embed/${m.id}?autoplay=1&rel=0&modestbranding=1"
       allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  const vw = $('#veil-vote');
+  vw.dataset.id = m.id;
+  const v = (VOTES.votes || {})[m.id] || {ok:0, fake:0};
+  const c = vw.querySelector('.v-count');
+  if (c) c.textContent = (v.ok||0)+(v.fake||0) ? `✓${v.ok||0} ✗${v.fake||0}` : '';
   $('#veil').classList.add('on');
   document.body.style.overflow = 'hidden';
 }
