@@ -63,6 +63,18 @@
     "faz_09o1i_8": {
       "ok": 0,
       "fake": 1
+    },
+    "B_2w9ud9mZg": {
+      "ok": 0,
+      "fake": 1
+    },
+    "BNrWfB2-7pU": {
+      "ok": 1,
+      "fake": 0
+    },
+    "EirgBwylBYQ": {
+      "ok": 1,
+      "fake": 0
     }
   },
   "rejected_ids": [
@@ -74,45 +86,13 @@
     "5G5zqjDW20E",
     "QKOezO8yNdo",
     "cqIZfoI37OE",
-    "faz_09o1i_8"
+    "faz_09o1i_8",
+    "B_2w9ud9mZg",
+    "LIYM6ajRZzc"
   ],
   "rejected_channels": [
     "wishlist",
-    "iPhone catalog"
-  ],
-  "voters": {
-    "AwRqdtV-edI": [
-      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
-    ],
-    "sbhKAMe_Gzo": [
-      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
-    ],
-    "S1HyTSBNALU": [
-      "127.0.0.1"
-    ],
-    "sOur04Yglxc": [
-      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
-    ],
-    "QS-rzJgGVqE": [
-      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
-    ],
-    "D0A36083JOU": [
-      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
-    ],
-    "5G5zqjDW20E": [
-      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
-    ],
-    "QKOezO8yNdo": [
-      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
-    ],
-    "HnKU2tCR_s8": [
-      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
-    ],
-    "cqIZfoI37OE": [
-      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
-    ],
-    "faz_09o1i_8": [
-      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
-    ]
-  }
+    "iPhone catalog",
+    "Collaborators"
+  ]
 }

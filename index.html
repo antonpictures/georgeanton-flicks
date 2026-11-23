@@ -358,11 +358,11 @@ document.addEventListener('click', async e => {
       VOTES.votes[id] = d.votes;
       const c = w.querySelector('.v-count');
       if (c) c.textContent = `✓${d.votes.ok||0} ✗${d.votes.fake||0}`;
-      w.querySelectorAll('button').forEach(x => { x.disabled = true; x.style.opacity='.4'; x.style.cursor='default'; });
+
       // re-render so a downvoted title drops to the bottom immediately
       if (vote === 'fake') setTimeout(render, 400);
     } else if (d.reason === 'already voted'){
-      w.querySelectorAll('button').forEach(x => { x.disabled = true; x.style.opacity='.4'; x.style.cursor='default'; });
+
     }
   } catch {}
 });

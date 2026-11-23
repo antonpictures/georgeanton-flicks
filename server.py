@@ -132,16 +132,10 @@ class Handler(SimpleHTTPRequestHandler):
             vote = body.get("vote")
             if vote not in ("ok", "fake"):
                 return self._json({"ok": False, "reason": "bad vote"}, 400)
-            ip = client_ip(self)
             v = load_votes()
-            voters = v.setdefault("voters", {})
-            already = voters.setdefault(vid, [])
-            if ip in already:
-                return self._json({"ok": False, "reason": "already voted",
-                                   "votes": v["votes"].get(vid, {})}, 200)
             entry = v["votes"].setdefault(vid, {"ok": 0, "fake": 0})
+            # No dedup — pure crowd algorithm. Every click counts.
             entry[vote] = entry.get(vote, 0) + 1
-            already.append(ip)
             # A FAKE vote is a ranking signal, not a deletion: the film stays
             # in the library but sinks to the bottom of the shelf. Alice also
             # learns the uploader so she stops adding more from it.
