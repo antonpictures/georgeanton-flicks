@@ -75,6 +75,202 @@
     "EirgBwylBYQ": {
       "ok": 1,
       "fake": 0
+    },
+    "Ofs3PPVC7MM": {
+      "ok": 0,
+      "fake": 1
+    },
+    "a08dt36HFbQ": {
+      "ok": 1,
+      "fake": 0
+    },
+    "hrDtq30-um4": {
+      "ok": 1,
+      "fake": 0
+    },
+    "f-0fARu60yk": {
+      "ok": 0,
+      "fake": 1
+    },
+    "orQXNVXoNwQ": {
+      "ok": 0,
+      "fake": 1
+    },
+    "GtP124kismw": {
+      "ok": 1,
+      "fake": 0
+    },
+    "BJ9Wqw6mCJ0": {
+      "ok": 1,
+      "fake": 0
+    },
+    "Ou_sfqHqEMI": {
+      "ok": 1,
+      "fake": 0
+    },
+    "vHOL3ccq4DA": {
+      "ok": 0,
+      "fake": 1
+    },
+    "eE2Wgop9VLM": {
+      "ok": 1,
+      "fake": 0
+    },
+    "SFF40Rbhjo4": {
+      "ok": 1,
+      "fake": 0
+    },
+    "meoObszzQUY": {
+      "ok": 1,
+      "fake": 0
+    },
+    "RzFZNP1MuWI": {
+      "ok": 0,
+      "fake": 1
+    },
+    "K0jwF23-ud8": {
+      "ok": 1,
+      "fake": 0
+    },
+    "vf2WaF8h9Ek": {
+      "ok": 1,
+      "fake": 0
+    },
+    "xMGXpyp4Cg0": {
+      "ok": 1,
+      "fake": 3
+    },
+    "0iad2dYsD7c": {
+      "ok": 1,
+      "fake": 0
+    },
+    "ManoGouo_r0": {
+      "ok": 1,
+      "fake": 0
+    },
+    "iDZqSqNZq7Q": {
+      "ok": 0,
+      "fake": 1
+    },
+    "HmlX3fLQrEc": {
+      "ok": 1,
+      "fake": 0
+    },
+    "P7wK4Jx5puA": {
+      "ok": 0,
+      "fake": 2
+    },
+    "REJHYg1uV4g": {
+      "ok": 1,
+      "fake": 0
+    },
+    "DnSaYTHMrTY": {
+      "ok": 1,
+      "fake": 0
+    },
+    "28eax3ECuss": {
+      "ok": 1,
+      "fake": 0
+    },
+    "_NQ7nNoIQak": {
+      "ok": 0,
+      "fake": 1
+    },
+    "ULiW1WRLRMM": {
+      "ok": 2,
+      "fake": 0
+    },
+    "XURCwhO_ccU": {
+      "ok": 0,
+      "fake": 1
+    },
+    "Z5mnzUfCVCY": {
+      "ok": 0,
+      "fake": 1
+    },
+    "1Ft7SP3sKAM": {
+      "ok": 0,
+      "fake": 1
+    },
+    "r2YvAVvOfDA": {
+      "ok": 0,
+      "fake": 1
+    },
+    "LsZjcmI3r4s": {
+      "ok": 1,
+      "fake": 0
+    },
+    "10JJdcwCAp8": {
+      "ok": 0,
+      "fake": 1
+    },
+    "koFv1MLS8D8": {
+      "ok": 1,
+      "fake": 0
+    },
+    "280I8F3zTeI": {
+      "ok": 0,
+      "fake": 1
+    },
+    "LVBHi70OluE": {
+      "ok": 1,
+      "fake": 0
+    },
+    "r9e69Z7CNuI": {
+      "ok": 1,
+      "fake": 0
+    },
+    "BXyFlEeOaOk": {
+      "ok": 3,
+      "fake": 0
+    },
+    "_CoDAFSNeTc": {
+      "ok": 1,
+      "fake": 0
+    },
+    "W5EZ5fKn2aU": {
+      "ok": 1,
+      "fake": 0
+    },
+    "OLTmq4UFBJ0": {
+      "ok": 1,
+      "fake": 0
+    },
+    "GcqdnbpmqYw": {
+      "ok": 0,
+      "fake": 1
+    },
+    "Y2DijiP0rfw": {
+      "ok": 0,
+      "fake": 1
+    },
+    "pxOLmxZhUgI": {
+      "ok": 1,
+      "fake": 0
+    },
+    "QZIcKgGwlxA": {
+      "ok": 1,
+      "fake": 0
+    },
+    "XYDe_6RuiKQ": {
+      "ok": 2,
+      "fake": 0
+    },
+    "PBN2E1-QIcY": {
+      "ok": 2,
+      "fake": 0
+    },
+    "GONMsiEQC9A": {
+      "ok": 1,
+      "fake": 0
+    },
+    "sx8pViXxZQg": {
+      "ok": 3,
+      "fake": 1
+    },
+    "EIjGf1Ydg6o": {
+      "ok": 0,
+      "fake": 2
     }
   },
   "rejected_ids": [
@@ -88,11 +284,32 @@
     "cqIZfoI37OE",
     "faz_09o1i_8",
     "B_2w9ud9mZg",
-    "LIYM6ajRZzc"
+    "LIYM6ajRZzc",
+    "Ofs3PPVC7MM",
+    "f-0fARu60yk",
+    "orQXNVXoNwQ",
+    "vHOL3ccq4DA",
+    "RzFZNP1MuWI",
+    "xMGXpyp4Cg0",
+    "iDZqSqNZq7Q",
+    "P7wK4Jx5puA",
+    "_NQ7nNoIQak",
+    "XURCwhO_ccU",
+    "Z5mnzUfCVCY",
+    "1Ft7SP3sKAM",
+    "r2YvAVvOfDA",
+    "10JJdcwCAp8",
+    "280I8F3zTeI",
+    "GcqdnbpmqYw",
+    "Y2DijiP0rfw",
+    "sx8pViXxZQg",
+    "EIjGf1Ydg6o"
   ],
   "rejected_channels": [
     "wishlist",
     "iPhone catalog",
-    "Collaborators"
+    "Collaborators",
+    "Allo Stream",
+    "The Midnight Screening"
   ]
 }
