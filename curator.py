@@ -660,6 +660,7 @@ def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
         runtime=info.get("runtime"), source=source, raw_title=raw_title[:180],
         status=probed["status"], availability=probed["availability"],
         confidence=info["confidence"], notes=info["notes"],
+        poster=info.get("poster"),
     )
     return True
 
@@ -798,6 +799,22 @@ def region_scan(cat: dict[str, Movie], films: int = 6) -> int:
     return done
 
 
+def enrich_posters(cat: dict[str, Movie]) -> int:
+    """Fetch Wikipedia posters for films that were identified via Wikipedia."""
+    n = 0
+    for i, m in enumerate(cat.values()):
+        if m.poster or m.confidence < 0.85:
+            continue
+        w = wiki_lookup(m.title)
+        if w and w.get("poster"):
+            m.poster = w["poster"]
+            n += 1
+        if (i + 1) % 25 == 0:
+            save(cat)
+            print(f"  enriched {i+1}", flush=True)
+    return n
+
+
 def health_check(cat: dict[str, Movie], max_checks: int = 200) -> int:
     """Mark the dead. YouTube purges this supply constantly — that is the job."""
     changed = 0
@@ -867,6 +884,12 @@ def main() -> None:
 
     cat = load()
     print(f"Alice curator — {len(cat)} films in library", flush=True)
+
+    if "--posters" in argv:
+        n = enrich_posters(cat)
+        save(cat)
+        print(f"posters added: {n}", flush=True)
+        return
 
     if "--regions" in argv:
         i = argv.index("--regions")

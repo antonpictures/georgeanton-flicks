@@ -35,16 +35,26 @@
     "sOur04Yglxc": {
       "ok": 1,
       "fake": 0
+    },
+    "QS-rzJgGVqE": {
+      "ok": 1,
+      "fake": 0
+    },
+    "D0A36083JOU": {
+      "ok": 0,
+      "fake": 1
     }
   },
   "rejected_ids": [
     "u67xqVUIqLU",
     "HpEiqu5P3tM",
     "sbhKAMe_Gzo",
-    "S1HyTSBNALU"
+    "S1HyTSBNALU",
+    "D0A36083JOU"
   ],
   "rejected_channels": [
-    "wishlist"
+    "wishlist",
+    "iPhone catalog"
   ],
   "voters": {
     "AwRqdtV-edI": [
@@ -58,6 +68,12 @@
     ],
     "sOur04Yglxc": [
       "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
+    ],
+    "QS-rzJgGVqE": [
+      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
+    ],
+    "D0A36083JOU": [
+      "2600:1700:21b0:2d80:a454:62b7:4a05:98b6"
     ]
   }
 }
