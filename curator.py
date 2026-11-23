@@ -672,6 +672,7 @@ def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
         status=probed["status"], availability=probed["availability"],
         confidence=info["confidence"], notes=info["notes"],
         poster=info.get("poster"),
+        views=probed.get("views") or 0,
     )
     return True
 
