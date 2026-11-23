@@ -1,3 +1,4 @@
 *.log
 __pycache__/
 movies_catalog.v1-garbage.json
+movies_catalog.json.pre_scan

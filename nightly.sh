@@ -9,6 +9,7 @@ LOG=/Users/ioanganton/.sifta-logs/flicks-curator.log
 
 cd "$DIR" || exit 1
 echo "=== $(date -u +%FT%TZ) nightly start ===" >> "$LOG"
+"$PY" dead_link_scan.py --workers 12 >> "$LOG" 2>&1
 "$PY" curator.py --no-ingest >> "$LOG" 2>&1
 "$PY" curator.py --regions 6 >> "$LOG" 2>&1
 "$PY" discover.py --from-catalog --depth 1 --max 25 >> "$LOG" 2>&1
