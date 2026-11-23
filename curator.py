@@ -74,8 +74,8 @@ JUNK = re.compile(
     r"trailer|teaser|clip|behind the scenes|bloopers|interview|"
     r"full episode|episode \d|season \d|web ?series|music video|"
     r"lyrics|song|podcast|reaction|compilation|shorts|live ?stream|"
-    r"highlights|goals|vs\.?|list of|episodes?|franchise|"
-    r"dvd|soundtrack|audiobook|asmr)\b",
+    r"highlights|goals|vs\.?|list of|episodes?|franchise|season \d|"
+    r"s\d+e\d+|dvd|soundtrack|audiobook|asmr)\b",
     re.I,
 )
 

@@ -289,19 +289,28 @@ function render(){
   if (Q || VIEW !== 'all'){
     main.innerHTML = shelf(`${rows.length} result${rows.length === 1 ? '' : 's'}`, rows);
   } else {
-    const recent = rows.filter(m => (m.year || 0) >= 2025);
-    const mid = rows.filter(m => (m.year || 0) >= 2020 && (m.year || 0) < 2025);
-    const older = rows.filter(m => (m.year || 0) < 2020);
+    // Each film appears in exactly ONE shelf — no duplicates across rows.
+    const shown = new Set();
+    const take = (list) => { const out = list.filter(m => !shown.has(m.id));
+      out.forEach(m => shown.add(m.id)); return out; };
+    const recent = take(rows.filter(m => (m.year || 0) >= 2025));
+    const mid = take(rows.filter(m => (m.year || 0) >= 2020 && (m.year || 0) < 2025));
     const byGenre = {};
     rows.forEach(m => (m.genres || []).forEach(g => (byGenre[g] ||= []).push(m)));
     const genreOrder = ['Action','Thriller','Crime','Horror','Sci-Fi','Drama','Adventure','Comedy','Mystery','Fantasy'];
-    const genKeys = genreOrder.filter(g => (byGenre[g] || []).length >= 4);
+    const genKeys = genreOrder.filter(g => (byGenre[g] || []).filter(m => !shown.has(m.id)).length >= 4);
+    const genreShelves = genKeys.slice(0, 6).map(g => {
+      const items = take(byGenre[g]);
+      return items.length ? shelf(g, items) : '';
+    }).join('');
+    const older = take(rows.filter(m => (m.year || 0) < 2020 && (m.year || 0) > 0));
+    const undated = take(rows.filter(m => !m.year));
     main.innerHTML =
       shelf('New this year & next', recent)
       + shelf('2020s so far', mid)
-      + genKeys.slice(0, 6).map(g => shelf(g, byGenre[g])).join('')
+      + genreShelves
       + shelf('Older films', older)
-      + shelf('Everything else', rows.filter(m => !m.year));
+      + shelf('Unclassified', undated);
   }
   document.querySelectorAll('.card').forEach(c => {
     c.onclick = () => openFilm(CAT.find(m => m.id === c.dataset.id));

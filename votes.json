@@ -31,6 +31,10 @@
     "S1HyTSBNALU": {
       "ok": 0,
       "fake": 1
+    },
+    "sOur04Yglxc": {
+      "ok": 1,
+      "fake": 0
     }
   },
   "rejected_ids": [
@@ -51,6 +55,9 @@
     ],
     "S1HyTSBNALU": [
       "127.0.0.1"
+    ],
+    "sOur04Yglxc": [
+      "2600:1700:21b0:2d80:4436:eafa:dba2:abe9"
     ]
   }
 }
