@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Georgeanton Flicks — curated full movies</title>
+<link rel="icon" href="/ant.svg">
+<style>
+  :root{--bg:#0a0a0b;--panel:#141416;--line:#232326;--text:#f4f4f5;--dim:#8b8b93;
+        --red:#e50914;--green:#39d353}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scrollbar-color:#333 transparent}
+  body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+
+  header{position:fixed;inset:0 0 auto;z-index:60;display:flex;align-items:center;gap:20px;
+    padding:14px 40px;background:linear-gradient(180deg,rgba(10,10,11,.98),rgba(10,10,11,.7));
+    backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .2s}
+  header.solid{border-bottom-color:var(--line)}
+  .brand{font-size:19px;font-weight:800;letter-spacing:-.6px;color:var(--red);white-space:nowrap}
+  .brand span{color:var(--text);font-weight:500;letter-spacing:0}
+  nav{display:flex;gap:18px;font-size:13px}
+  nav a{color:var(--dim);text-decoration:none;transition:color .15s}
+  nav a:hover,nav a.on{color:var(--text)}
+  .search{margin-left:auto;display:flex;align-items:center;gap:8px;background:#1c1c1f;
+    border:1px solid var(--line);border-radius:24px;padding:7px 14px;width:min(320px,34vw)}
+  .search input{all:unset;flex:1;font-size:13px;color:var(--text)}
+  .search input::placeholder{color:#6a6a72}
+
+  .hero{position:relative;height:min(62vh,520px);display:flex;align-items:flex-end;
+    padding:0 48px 42px;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(120% 100% at 20% 0%,rgba(229,9,20,.22),transparent 60%),
+               linear-gradient(0deg,var(--bg) 4%,rgba(10,10,11,.35) 60%,rgba(10,10,11,.85))}
+  .hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 30%;
+    filter:saturate(.9) contrast(1.05)}
+  .hero-in{position:relative;z-index:2;max-width:640px}
+  .kicker{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--green);margin-bottom:10px}
+  .hero h1{font-size:clamp(28px,4.4vw,52px);line-height:1.03;letter-spacing:-1.6px;font-weight:800}
+  .metaline{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0 10px;
+    font-size:12.5px;color:var(--dim)}
+  .pill{border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:11px}
+  .hero p.syn{font-size:13.5px;line-height:1.55;color:#c9c9cf;max-width:52ch}
+  .row-btns{display:flex;gap:10px;margin-top:18px}
+  .btn{border:0;border-radius:6px;padding:11px 22px;font-size:13.5px;font-weight:600;cursor:pointer;
+    display:inline-flex;align-items:center;gap:8px;transition:transform .12s,background .15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn.p{background:var(--text);color:#111}
+  .btn.s{background:rgba(255,255,255,.13);color:var(--text);backdrop-filter:blur(6px)}
+
+  main{padding-bottom:130px}
+  .shelf{margin:26px 0 6px}
+  .shelf h2{font-size:14.5px;font-weight:600;color:#e6e6ea;padding:0 48px 10px;letter-spacing:.2px}
+  .strip{display:flex;gap:12px;overflow-x:auto;padding:6px 48px 16px;scroll-snap-type:x mandatory}
+  .strip::-webkit-scrollbar{height:7px}
+  .strip::-webkit-scrollbar-thumb{background:#2c2c30;border-radius:4px}
+  .strip::-webkit-scrollbar-track{background:transparent}
+  .card{flex:0 0 auto;width:252px;scroll-snap-align:start;cursor:pointer;position:relative;
+    transition:transform .18s ease}
+  .card:hover{transform:translateY(-5px) scale(1.02);z-index:5}
+  .thumb{position:relative;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#1b1b1e;
+    box-shadow:0 6px 18px rgba(0,0,0,.5)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s}
+  .card:hover .thumb img{filter:brightness(1.12)}
+  .dead .thumb img{filter:grayscale(1) brightness(.45)}
+  .flag{position:absolute;top:7px;left:7px;font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;
+    background:rgba(0,0,0,.82);border-radius:4px;padding:3px 6px;color:#e8e8ea}
+  .flag.bad{background:rgba(229,9,20,.9)}
+  .tick{position:absolute;top:7px;right:7px;font-size:10px;background:rgba(0,0,0,.78);
+    border-radius:4px;padding:3px 6px;color:#d8d8dc}
+  .card .cap{padding:8px 2px 0}
+  .card .t{font-size:12.3px;font-weight:600;line-height:1.3;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card .s{font-size:10.5px;color:var(--dim);margin-top:3px}
+
+  .empty{padding:70px 48px;color:var(--dim);font-size:14px}
+  .foot{padding:30px 48px;color:#5c5c64;font-size:11.5px;border-top:1px solid var(--line);margin-top:30px;
+    display:flex;gap:18px;flex-wrap:wrap;align-items:center}
+  .led{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 8px var(--green);margin-right:6px}
+
+  #veil{position:fixed;inset:0;z-index:200;background:#000;display:none;
+    flex-direction:column;align-items:center;justify-content:center}
+  #veil.on{display:flex}
+  #veil .bar{display:flex;align-items:center;gap:14px;width:min(1200px,94vw);padding:10px 4px 14px}
+  #veil .bar h3{font-size:15px;font-weight:600;flex:1;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  #veil .bar button{all:unset;cursor:pointer;color:var(--dim);font-size:22px;line-height:1;padding:4px 8px}
+  #veil .bar button:hover{color:var(--text)}
+  .frame{width:min(1200px,94vw);aspect-ratio:16/9;background:#111;border-radius:8px;overflow:hidden}
+  .frame iframe{width:100%;height:100%;border:0;display:block}
+
+  #alice{position:fixed;left:16px;bottom:16px;z-index:90;width:238px;background:rgba(20,20,22,.92);
+    border:1px solid var(--line);border-radius:10px;padding:11px 13px;backdrop-filter:blur(10px);
+    font-size:11.5px;line-height:1.5;color:#b9b9c0;box-shadow:0 8px 26px rgba(0,0,0,.5)}
+  #alice .ahead{display:flex;align-items:center;gap:7px;color:#e8e8ea;font-size:11px;
+    letter-spacing:1.3px;text-transform:uppercase;margin-bottom:6px}
+  #alice .dot{width:6px;height:6px;border-radius:50%;background:var(--green);
+    box-shadow:0 0 7px var(--green);flex:0 0 auto}
+  #alice.busy .dot{background:#e5a50a;box-shadow:0 0 7px #e5a50a}
+  #alice .abody b{color:#e8e8ea;font-weight:600}
+  #alice button{margin-top:8px;width:100%;background:#1f1f23;border:1px solid var(--line);
+    color:#d4d4da;border-radius:6px;padding:6px 8px;font-size:11px;cursor:pointer;transition:.15s}
+  #alice button:hover{background:#2a2a30;color:#fff}
+  @media(max-width:760px){#alice{display:none}}
+  @media(max-width:760px){
+    header{padding:12px 16px;gap:12px} nav{display:none}
+    .hero{padding:0 18px 30px;height:auto;margin-top:52px}
+    .shelf h2,.strip,.empty,.foot{padding-left:18px;padding-right:18px}
+    .card{width:190px}
+  }
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="brand">GEORGEANTON <span>FLICKS</span></div>
+  <nav>
+    <a href="#" class="on" data-view="all">All</a>
+    <a href="#" data-view="new">New</a>
+    <a href="#" data-view="action">Action</a>
+    <a href="#" data-view="horror">Horror</a>
+    <a href="https://imperialdaily.com/">News</a>
+  </nav>
+  <label class="search">
+    <input id="q" type="search" placeholder="Search the library…" autocomplete="off">
+  </label>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-in">
+    <div class="kicker">Curated by Alice · full films, free</div>
+    <h1 id="hero-title">Loading library…</h1>
+    <div class="metaline" id="hero-meta"></div>
+    <p class="syn" id="hero-syn"></p>
+    <div class="row-btns">
+      <button class="btn p" id="hero-play">▶ Play</button>
+      <button class="btn s" id="hero-rand">🎲 Surprise me</button>
+    </div>
+  </div>
+</section>
+
+<main id="main"></main>
+
+<div class="foot">
+  <span><span class="led"></span><span id="stat">connecting…</span></span>
+  <span>Every playback is served by YouTube. Alice only curates the shelf.</span>
+  <span id="built"></span>
+</div>
+
+<aside id="alice">
+  <div class="ahead"><span class="dot"></span> Alice · librarian</div>
+  <div class="abody" id="alice-body">Reading the shelf…</div>
+  <button id="alice-run">Ask her to crawl now</button>
+</aside>
+
+<div id="veil">
+  <div class="bar">
+    <h3 id="veil-title"></h3>
+    <button id="veil-x" title="Close">✕</button>
+  </div>
+  <div class="frame" id="frame"></div>
+</div>
+
+<script>
+const API = '/api/catalog';
+let CAT = [], VIEW = 'all', Q = '';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mins = s => s ? Math.round(s / 60) + 'm' : '';
+const POSTERS = ['hq720', 'sddefault', 'hqdefault', 'mqdefault'];
+const poster = id => `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+function posterStep(img, id){
+  const i = Number(img.dataset.step || 0) + 1;
+  if (i >= POSTERS.length){ img.onerror = null; return; }
+  img.dataset.step = i;
+  img.src = `https://i.ytimg.com/vi/${id}/${POSTERS[i]}.jpg`;
+}
+
+function playable(m){ return m.status === 'ok' || m.status === 'restricted'; }
+
+function pickFeatured(){
+  const ok = CAT.filter(playable);
+  return ok.find(m => (m.year || 0) >= 2025) || ok[0] || CAT[0];
+}
+
+function renderHero(){
+  const m = pickFeatured();
+  if (!m){ $('#hero-title').textContent = 'Library is being built'; return; }
+  $('#hero-bg').style.backgroundImage = `url(https://i.ytimg.com/vi/${m.id}/maxresdefault.jpg),url(${poster(m.id)})`;
+  $('#hero-title').textContent = m.title;
+  $('#hero-meta').innerHTML = [
+    m.year ? `<span class="pill">${m.year}</span>` : '',
+    m.duration ? `<span>${mins(m.duration)}</span>` : '',
+    (m.genres || []).slice(0,3).map(g => `<span class="pill">${esc(g)}</span>`).join(''),
+    `<span>${esc(m.source || '')}</span>`,
+  ].join('');
+  $('#hero-syn').textContent = m.status === 'ok'
+    ? `Playing from ${m.source}. Alice picked this one because it is new in the library.`
+    : 'This upload is region-limited — YouTube will say if it plays for you.';
+  $('#hero-play').onclick = () => openFilm(m);
+}
+
+function card(m){
+  const dead = !playable(m);
+  return `<article class="card ${dead ? 'dead' : ''}" data-id="${m.id}">
+    <div class="thumb">
+      <img loading="lazy" src="${poster(m.id)}" alt="${esc(m.title)}"
+           onerror="posterStep(this,'${m.id}')">
+      ${m.status === 'ok' ? '' : `<span class="flag bad">${esc(m.status)}</span>`}
+      ${m.duration ? `<span class="tick">${mins(m.duration)}</span>` : ''}
+    </div>
+    <div class="cap">
+      <div class="t">${esc(m.title)}</div>
+      <div class="s">${m.year ? m.year + ' · ' : ''}${esc(m.source || '')}${
+        (m.regions && m.regions.length) ? ' · 🌍 ' + m.regions.slice(0,4).join(' ') : ''}</div>
+    </div>
+  </article>`;
+}
+
+function shelf(title, rows){
+  if (!rows.length) return '';
+  return `<section class="shelf"><h2>${esc(title)} <span style="color:#5a5a62;font-weight:400">· ${rows.length}</span></h2>
+    <div class="strip">${rows.map(card).join('')}</div></section>`;
+}
+
+function applyFilter(){
+  let rows = CAT;
+  if (VIEW === 'new') rows = rows.filter(m => (m.year || 0) >= 2025 ||
+    (m.added_at && (Date.now()/1000 - m.added_at) < 86400 * 30));
+  else if (VIEW !== 'all') rows = rows.filter(m =>
+    (m.genres || []).some(g => g.toLowerCase().includes(VIEW)) ||
+    m.title.toLowerCase().includes(VIEW));
+  if (Q) rows = rows.filter(m => (m.title + ' ' + (m.source||'') + ' ' + (m.genres||[]).join(' '))
+    .toLowerCase().includes(Q));
+  return rows;
+}
+
+function render(){
+  const rows = applyFilter();
+  const main = $('#main');
+  if (!rows.length){
+    main.innerHTML = `<div class="empty">Nothing here yet. ${CAT.length ? 'Try another search.' : 'Alice is still crawling the uploaders.'}</div>`;
+    return;
+  }
+  if (Q || VIEW !== 'all'){
+    main.innerHTML = shelf(`${rows.length} result${rows.length === 1 ? '' : 's'}`, rows);
+  } else {
+    const byDecade = {}, byGenre = {};
+    rows.forEach(m => {
+      const y = m.year || 0;
+      const dec = y ? `${Math.floor(y/10)*10}s` : 'Undated';
+      (byDecade[dec] ||= []).push(m);
+      (m.genres || []).forEach(g => (byGenre[g] ||= []).push(m));
+    });
+    const order = ['2020s','2010s','2000s','1990s','1980s','Undated'];
+    const decKeys = order.filter(k => byDecade[k] && byDecade[k].length)
+      .concat(Object.keys(byDecade).filter(k => !order.includes(k)));
+    const genreOrder = ['Action','Thriller','Crime','Horror','Sci-Fi','Drama','Adventure','Comedy','Mystery'];
+    const genKeys = genreOrder.filter(g => byGenre[g] && byGenre[g].length >= 3)
+      .concat(Object.keys(byGenre).filter(g => !genreOrder.includes(g) && byGenre[g].length >= 3));
+    main.innerHTML =
+      decKeys.slice(0, 2).map(k => shelf(k === '2020s' ? 'New — the 2020s' : `Films of the ${k}`, byDecade[k])).join('')
+      + genKeys.slice(0, 6).map(g => shelf(g, byGenre[g])).join('')
+      + decKeys.slice(2).map(k => shelf(`Films of the ${k}`, byDecade[k])).join('');
+  }
+  document.querySelectorAll('.card').forEach(c => {
+    c.onclick = () => openFilm(CAT.find(m => m.id === c.dataset.id));
+  });
+}
+
+function openFilm(m){
+  if (!m) return;
+  $('#veil-title').textContent = m.title + (m.year ? ` (${m.year})` : '');
+  $('#frame').innerHTML = `<iframe src="https://www.youtube.com/embed/${m.id}?autoplay=1&rel=0&modestbranding=1"
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  $('#veil').classList.add('on');
+  document.body.style.overflow = 'hidden';
+}
+function closeVeil(){
+  $('#veil').classList.remove('on');
+  $('#frame').innerHTML = '';
+  document.body.style.overflow = '';
+}
+$('#veil-x').onclick = closeVeil;
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVeil(); });
+
+$('#q').oninput = e => { Q = e.target.value.trim().toLowerCase(); render(); };
+document.querySelectorAll('nav a[data-view]').forEach(a => {
+  a.onclick = e => {
+    e.preventDefault();
+    document.querySelectorAll('nav a').forEach(x => x.classList.remove('on'));
+    a.classList.add('on');
+    VIEW = a.dataset.view;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+});
+$('#hero-rand').onclick = () => {
+  const ok = CAT.filter(playable);
+  if (ok.length) openFilm(ok[Math.floor(Math.random() * ok.length)]);
+};
+window.addEventListener('scroll', () => {
+  $('#hdr').classList.toggle('solid', window.scrollY > 12);
+}, { passive: true });
+
+async function boot(){
+  try {
+    const r = await fetch(API, { cache: 'no-store' });
+    const d = await r.json();
+    CAT = d.movies || [];
+    $('#stat').textContent = `${CAT.filter(playable).length} playable of ${CAT.length} films · ${d.sources ?? '?'} uploaders`;
+    $('#built').textContent = d.built ? 'library refreshed ' + new Date(d.built * 1000).toLocaleString() : '';
+  } catch (err) {
+    CAT = [];
+    $('#stat').textContent = 'catalog unavailable';
+  }
+  renderHero();
+  render();
+  aliceStatus();
+}
+
+async function aliceStatus(){
+  const box = $('#alice'), body = $('#alice-body');
+  try {
+    const d = await fetch('/api/health', { cache: 'no-store' }).then(r => r.json());
+    const rf = d.refresh || {};
+    if (rf.running){
+      box.classList.add('busy');
+      body.innerHTML = 'Crawling the uploaders now — this takes a few minutes.';
+      setTimeout(aliceStatus, 6000);
+      return;
+    }
+    box.classList.remove('busy');
+    const hrs = rf.finished ? ((Date.now() / 1000 - rf.finished) / 3600) : null;
+    body.innerHTML = `<b>${d.playable}</b> of <b>${d.count}</b> films playable.<br>`
+      + (hrs === null ? 'Never crawled yet.'
+         : hrs < 1 ? 'Last crawl less than an hour ago.'
+         : `Last crawl ${hrs.toFixed(0)}h ago.`);
+  } catch { body.textContent = 'Server is not answering.'; }
+}
+
+$('#alice-run').onclick = async () => {
+  const box = $('#alice');
+  box.classList.add('busy');
+  $('#alice-body').textContent = 'Waking up…';
+  try { await fetch('/api/refresh', { method: 'POST' }); } catch {}
+  setTimeout(aliceStatus, 2500);
+};
+
+boot();
+</script>
+</body>
+</html>
