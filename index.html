@@ -74,6 +74,14 @@
   .card .t{font-size:12.3px;font-weight:600;line-height:1.3;
     display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .card .s{font-size:10.5px;color:var(--dim);margin-top:3px}
+  .vote{display:flex;align-items:center;gap:4px;margin-top:6px;opacity:.7;transition:opacity .15s}
+  .card:hover .vote{opacity:1}
+  .vote button{all:unset;cursor:pointer;font-size:11px;padding:2px 6px;border-radius:4px;
+    background:rgba(255,255,255,.08);color:#c9c9cf;transition:.15s}
+  .vote button:hover{background:rgba(255,255,255,.18)}
+  .vote .v-ok:hover{color:#39d353}
+  .vote .v-fake:hover{color:#e50914}
+  .vote .v-count{font-size:9.5px;color:#6a6a72;margin-left:2px}
 
   .empty{padding:70px 48px;color:var(--dim);font-size:14px}
   .foot{padding:30px 48px;color:#5c5c64;font-size:11.5px;border-top:1px solid var(--line);margin-top:30px;
@@ -368,7 +376,42 @@ $('#alice-run').onclick = async () => {
   setTimeout(aliceStatus, 2500);
 };
 
+let VOTES = {};
+async function loadVotes(){
+  try { VOTES = await fetch('/api/votes').then(r=>r.json()); } catch { VOTES = {votes:{}}; }
+  document.querySelectorAll('.vote').forEach(w => {
+    const id = w.dataset.id;
+    const v = (VOTES.votes || {})[id] || {ok:0, fake:0};
+    const c = w.querySelector('.v-count');
+    if (c) c.textContent = (v.ok||0)+(v.fake||0) ? `✓${v.ok||0} ✗${v.fake||0}` : '';
+  });
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('.vote button');
+  if (!b) return;
+  e.stopPropagation();
+  const w = b.closest('.vote');
+  const id = w.dataset.id;
+  const vote = b.classList.contains('v-ok') ? 'ok' : 'fake';
+  try {
+    const r = await fetch('/api/vote', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({id, vote})});
+    const d = await r.json();
+    if (d.ok){
+      if (!VOTES.votes) VOTES.votes = {};
+      VOTES.votes[id] = d.votes;
+      const c = w.querySelector('.v-count');
+      if (c) c.textContent = `✓${d.votes.ok||0} ✗${d.votes.fake||0}`;
+      if (vote === 'fake' && (d.votes.fake||0) >= (d.votes.ok||0)+1){
+        const card = w.closest('.card');
+        if (card) card.classList.add('dead');
+      }
+    }
+  } catch {}
+});
+
 boot();
+loadVotes();
 </script>
 </body>
 </html>

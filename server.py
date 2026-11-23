@@ -27,11 +27,25 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 CATALOG = HERE / "movies_catalog.json"
+VOTES = HERE / "votes.json"
 PORT = int(os.environ.get("PORT", "8099"))
 PY = "/Users/ioanganton/.local/share/autoclip/venv/bin/python"
 
 _refresh_lock = threading.Lock()
 _refresh_state: dict = {"running": False, "started": 0, "finished": 0, "last_log": ""}
+
+
+def load_votes() -> dict:
+    if VOTES.exists():
+        try:
+            return json.loads(VOTES.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    return {"votes": {}, "rejected_ids": [], "rejected_channels": []}
+
+
+def save_votes(v: dict) -> None:
+    VOTES.write_text(json.dumps(v, indent=2), encoding="utf-8")
 
 
 def catalog_payload() -> dict:
@@ -90,6 +104,8 @@ class Handler(SimpleHTTPRequestHandler):
             p = catalog_payload()
             return self._json({"ok": True, "count": p["count"], "playable": p["playable"],
                                "refresh": _refresh_state})
+        if path == "/api/votes":
+            return self._json(load_votes())
         if path == "/api/refresh":
             return self._json({"refresh": _refresh_state})
         if path in ("/", "/index.html"):
@@ -97,7 +113,41 @@ class Handler(SimpleHTTPRequestHandler):
         return super().do_GET()
 
     def do_POST(self):  # noqa: N802
-        if self.path.split("?")[0] == "/api/refresh":
+        path = self.path.split("?")[0]
+        if path == "/api/vote":
+            try:
+                n = int(self.headers.get("Content-Length", "0"))
+                body = json.loads(self.rfile.read(n) or b"{}")
+            except Exception:  # noqa: BLE001
+                body = {}
+            vid = body.get("id")
+            vote = body.get("vote")
+            if vid not in ("ok", "fake") and vote not in ("ok", "fake"):
+                return self._json({"ok": False, "reason": "bad vote"}, 400)
+            if vote not in ("ok", "fake"):
+                return self._json({"ok": False, "reason": "bad vote"}, 400)
+            v = load_votes()
+            entry = v["votes"].setdefault(vid, {"ok": 0, "fake": 0})
+            entry[vote] = entry.get(vote, 0) + 1
+            # If a film gets marked fake, hide it and learn the channel.
+            if vote == "fake" and entry["fake"] >= entry["ok"] + 1:
+                try:
+                    rows = json.loads(CATALOG.read_text(encoding="utf-8"))
+                    for m in rows:
+                        if m.get("id") == vid:
+                            m["status"] = "fake"
+                            ch = m.get("source")
+                            if ch and ch not in v["rejected_channels"]:
+                                v["rejected_channels"].append(ch)
+                    if vid not in v["rejected_ids"]:
+                        v["rejected_ids"].append(vid)
+                    CATALOG.write_text(json.dumps(rows, ensure_ascii=False, indent=2),
+                                       encoding="utf-8")
+                except Exception:  # noqa: BLE001
+                    pass
+            save_votes(v)
+            return self._json({"ok": True, "votes": v["votes"].get(vid, {})})
+        if path == "/api/refresh":
             if _refresh_state["running"]:
                 return self._json({"started": False, "reason": "already running",
                                    "refresh": _refresh_state}, 202)

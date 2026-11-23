@@ -588,9 +588,25 @@ def clean_source(src: str, title: str) -> str:
     return s[:28]
 
 
+def load_votes() -> dict:
+    import json as _j
+    vf = HERE / "votes.json" if "HERE" in globals() else __import__("pathlib").Path(__file__).resolve().parent / "votes.json"
+    if vf.exists():
+        try:
+            return _j.loads(vf.read_text(encoding="utf-8"))
+        except Exception:  # noqa: BLE001
+            pass
+    return {"votes": {}, "rejected_ids": [], "rejected_channels": []}
+
+
 def add_movie(cat: dict[str, Movie], vid: str, raw_title: str, source: str,
               duration: int, deep: bool = False) -> bool:
     if vid in cat:
+        return False
+    _v = load_votes()
+    if vid in (_v.get("rejected_ids") or []):
+        return False
+    if source in (_v.get("rejected_channels") or []):
         return False
     if duration and not (MIN_SECONDS <= duration <= MAX_SECONDS):
         return False
