@@ -99,6 +99,7 @@ class Movie:
     regions: list[str] = field(default_factory=list)   # countries where it plays
     region_checked: float = 0.0
     poster: str | None = None
+    views: int = 0
 
 
 # === plumbing =============================================================
@@ -460,6 +461,7 @@ def probe(vid: str) -> dict:
                     "--print", "%(availability)s",
                     "--print", "%(duration)s",
                     "--print", "%(upload_date)s",
+                    "--print", "%(view_count)s",
                     "--print", "%(description)s",
                     f"https://www.youtube.com/watch?v={vid}"], timeout=60)
     blob = f"{out}\n{err}".lower()
@@ -478,10 +480,11 @@ def probe(vid: str) -> dict:
     avail = (lines[0].strip() if lines else "public") or "public"
     duration = int(lines[1]) if len(lines) > 1 and lines[1].strip().isdigit() else 0
     upload = lines[2].strip() if len(lines) > 2 else ""
-    desc = "\n".join(lines[3:])[:2500]
+    views = int(lines[3]) if len(lines) > 3 and lines[3].strip().isdigit() else 0
+    desc = "\n".join(lines[4:])[:2500]
     status = "ok" if avail in ("public", "unlisted") else "restricted"
     return {"status": status, "availability": avail, "duration": duration,
-            "upload_date": upload, "description": desc}
+            "upload_date": upload, "views": views, "description": desc}
 
 
 def video_health(vid: str) -> tuple[str, str]:
