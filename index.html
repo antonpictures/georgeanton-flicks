@@ -59,7 +59,8 @@
   .card{flex:0 0 auto;width:252px;scroll-snap-align:start;cursor:pointer;position:relative;
     transition:transform .18s ease}
   .card:hover{transform:translateY(-5px) scale(1.02);z-index:5}
-  .thumb{position:relative;aspect-ratio:16/9;border-radius:7px;overflow:hidden;background:#1b1b1e;
+  .thumb{position:relative;aspect-ratio:16/9;border-radius:7px;overflow:hidden;
+    background:linear-gradient(135deg,#1a1a22,#2a1a2a);
     box-shadow:0 6px 18px rgba(0,0,0,.5)}
   .thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:filter .2s}
   .card:hover .thumb img{filter:brightness(1.12)}
@@ -160,8 +161,9 @@
 
 <div id="veil">
   <div class="bar">
+    <button id="veil-back" class="btn s" style="padding:8px 14px;font-size:13px">← Back to shelf</button>
     <h3 id="veil-title"></h3>
-    <button id="veil-x" title="Close">✕</button>
+    <button id="veil-x" title="Close (Esc)">✕</button>
   </div>
   <div class="frame" id="frame"></div>
 </div>
@@ -177,7 +179,19 @@ const POSTERS = ['hq720', 'sddefault', 'hqdefault', 'mqdefault'];
 const poster = m => m.poster || `https://i.ytimg.com/vi/${m.id}/maxresdefault.jpg`;
 function posterStep(img, id){
   const i = Number(img.dataset.step || 0) + 1;
-  if (i >= POSTERS.length){ img.onerror = null; return; }
+  if (i >= POSTERS.length){
+    img.onerror = null;
+    img.style.display = 'none';
+    const t = img.parentElement;
+    if (t && !t.querySelector('.placeholder')) {
+      const p = document.createElement('div');
+      p.className = 'placeholder';
+      p.textContent = img.alt || '';
+      p.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:12px;text-align:center;font-size:12px;color:#8b8b93;font-weight:600';
+      t.appendChild(p);
+    }
+    return;
+  }
   img.dataset.step = i;
   img.src = `https://i.ytimg.com/vi/${id}/${POSTERS[i]}.jpg`;
 }
@@ -285,6 +299,8 @@ function closeVeil(){
   document.body.style.overflow = '';
 }
 $('#veil-x').onclick = closeVeil;
+$('#veil-back').onclick = closeVeil;
+$('#veil').addEventListener('click', e => { if (e.target === $('#veil')) closeVeil(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVeil(); });
 
 $('#q').oninput = e => { Q = e.target.value.trim().toLowerCase(); render(); };

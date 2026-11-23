@@ -17,8 +17,19 @@
     "added_at": 1795403508.39827,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/De_Gaulle_(2026_film)",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405167.8390248,
     "poster": null
   },
   {
@@ -39,8 +50,19 @@
     "added_at": 1795403696.366285,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/Run_Hide_Fight%3A_Infidels",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405182.126239,
     "poster": null
   },
   {
@@ -61,8 +83,19 @@
     "added_at": 1795402554.7859268,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/Shelter_(2026_film)",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405194.894815,
     "poster": null
   },
   {
@@ -83,8 +116,19 @@
     "added_at": 1795403517.134377,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/Spider-Man%3A_Brand_New_Day",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405208.21723,
     "poster": null
   },
   {
@@ -107,8 +151,19 @@
     "added_at": 1795402710.654859,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/The_Odyssey_(2026_film)",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405221.1625059,
     "poster": null
   },
   {
@@ -131,8 +186,19 @@
     "added_at": 1795402707.904611,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/Jurassic_World_Rebirth",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405233.5677829,
     "poster": null
   },
   {
@@ -154,8 +220,19 @@
     "added_at": 1795403603.956216,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/Play_Dirty_(2025_film)",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405247.1470962,
     "poster": null
   },
   {
@@ -173,8 +250,19 @@
     "added_at": 1795403674.329311,
     "confidence": 0.95,
     "notes": "wiki: https://en.wikipedia.org/wiki/2024_in_film",
-    "regions": [],
-    "region_checked": 0.0,
+    "regions": [
+      "US",
+      "GB",
+      "CA",
+      "DE",
+      "IN",
+      "BR",
+      "MX",
+      "AU",
+      "JP",
+      "FR"
+    ],
+    "region_checked": 1795405260.7705112,
     "poster": null
   },
   {
