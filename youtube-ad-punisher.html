@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🎯 YouTube Ad Punisher — Official Site</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
+<style>
+:root{--bg:#0a0a0b;--card:#141416;--line:#26262a;--text:#f4f4f5;--muted:#9b9ba3;--accent:#ff6b3d;--green:#6fdc8c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(circle at 20% 0,#1a1210,#0a0a0b 45%);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:920px;margin:0 auto;padding:48px 24px 80px}
+.brand{font:700 13px/1 "Avenir Next",sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-size:clamp(32px,6vw,54px);line-height:1.05;letter-spacing:-.03em}
+h1 .em{color:var(--accent)}
+.lede{margin-top:16px;font-size:clamp(17px,2.4vw,21px);color:var(--muted);max-width:640px}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:28px;padding:14px 24px;background:var(--accent);color:#1a0d08;font-weight:800;border-radius:12px;text-decoration:none;box-shadow:0 10px 30px #ff6b3d33}
+.cta:hover{filter:brightness(1.08)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin-top:36px}
+h2{font-size:22px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin-top:18px}
+.feature{background:#1a1a1d;border:1px solid var(--line);border-radius:12px;padding:18px}
+.feature h3{color:var(--green);font-size:15px;margin-bottom:6px}
+.feature p{color:var(--muted);font-size:14px}
+.steps{counter-reset:s;list-style:none;margin-top:8px}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 42px;color:var(--muted);border-bottom:1px solid var(--line)}
+.steps li:before{content:counter(s);position:absolute;left:0;top:10px;width:26px;height:26px;border-radius:50%;background:#2a1a12;color:var(--accent);font-weight:800;display:grid;place-items:center;font-size:13px}
+code{background:#222;color:#ffd9b0;padding:2px 6px;border-radius:5px;font-size:13px}
+.foot{margin-top:40px;color:#777;font-size:13px;border-top:1px solid var(--line);padding-top:20px}
+.foot a{color:var(--accent)}
+.badge{display:inline-block;background:#2a1a12;color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em;padding:5px 10px;border-radius:6px;margin-bottom:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">An Alice / SIFTA build · by George Anton</div>
+  <span class="badge">CHROME EXTENSION · MANIFEST V3</span>
+  <h1>🎯 YouTube Ad<br><span class="em">Punisher</span></h1>
+  <p class="lede">An ad plays. One reload. You land back exactly where you were — with zero waiting and no skip-button hunt.</p>
+  <a class="cta" href="https://chromewebstore.google.com/detail/bmeapchbddihmedgeimedlgfcdnblaog">Get it on the Chrome Web Store →</a>
+
+  <div class="card">
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li>Detects the ad overlay the moment it appears on YouTube.</li>
+      <li>Captures your exact playback position.</li>
+      <li>Reloads the page with the timestamp in the URL.</li>
+      <li>YouTube seeks back to your spot and playback resumes.</li>
+      <li>A short cooldown prevents reload loops; after repeated failures it briefly switches tabs to let the ad state settle.</li>
+    </ol>
+  </div>
+
+  <div class="grid">
+    <div class="feature"><h3>✓ Timestamp preserved</h3><p>Never lose your place in the video.</p></div>
+    <div class="feature"><h3>✓ Ad history</h3><p>Every ad logged with advertiser, video and duration.</p></div>
+    <div class="feature"><h3>✓ Export</h3><p>Download your history as JSON or CSV.</p></div>
+    <div class="feature"><h3>✓ Local only</h3><p>Nothing is sent anywhere. No account, no tracking.</p></div>
+  </div>
+
+  <div class="card">
+    <h2>Privacy</h2>
+    <p style="color:var(--muted)">Ad history is stored locally with <code>chrome.storage.local</code> and is never transmitted. You can clear it from the extension popup at any time. Permissions are limited to <code>storage</code>, <code>tabs</code>, and YouTube host access.</p>
+  </div>
+
+  <div class="foot">Open source (MIT) · <a href="https://github.com/antonpictures/youtube-punisher">github.com/antonpictures/youtube-punisher</a><br>Built on <a href="https://stigmergicode.com">Alice (SIFTA)</a>. Incognito requires manually allowing the extension in Chrome's extension details. Chrome, Brave, Edge and Opera supported; Safari experimental.</div>
+</div>
+</body>
+</html>
