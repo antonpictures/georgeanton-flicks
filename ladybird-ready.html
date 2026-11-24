@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ladybird Ready — what works on the new browser</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐞</text></svg>">
+<style>
+:root{--bg:#0a0a0b;--card:#141416;--line:#26262a;--text:#f4f4f5;--muted:#9b9ba3;--accent:#ff6b3d;--green:#6fdc8c;--amber:#e6b450;--red:#ff6b6b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:radial-gradient(circle at 20% 0,#1a1210,#0a0a0b 50%);color:var(--text);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+.wrap{max-width:980px;margin:0 auto;padding:48px 24px 80px}
+.brand{font:700 13px/1 sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-size:clamp(30px,5.5vw,48px);line-height:1.05;letter-spacing:-.03em}
+h1 .em{color:var(--accent)}
+.lede{margin-top:14px;font-size:clamp(16px,2.2vw,19px);color:var(--muted);max-width:720px}
+.badge{display:inline-block;background:#2a1a12;color:var(--accent);font-size:11px;font-weight:800;letter-spacing:.1em;padding:5px 10px;border-radius:6px;margin:14px 0 28px}
+table{width:100%;border-collapse:collapse;margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:14px}
+th{background:#1a1a1d;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+.status{display:inline-block;font-weight:800;font-size:12px;padding:3px 9px;border-radius:6px}
+.works{background:#1a2e22;color:var(--green)}
+.partial{background:#2e2a1a;color:var(--amber)}
+.broken{background:#2e1a1a;color:var(--red)}
+.note{color:var(--muted);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-top:30px}
+h2{font-size:20px;margin-bottom:10px}
+ul{margin:10px 0 0 20px;color:var(--muted);font-size:14px;line-height:1.7}
+code{background:#222;color:#ffd9b0;padding:2px 6px;border-radius:5px;font-size:13px}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:13px 22px;background:var(--accent);color:#1a0d08;font-weight:800;border-radius:10px;text-decoration:none}
+.foot{margin-top:40px;color:#777;font-size:13px;border-top:1px solid var(--line);padding-top:20px}
+.foot a{color:var(--accent)}
+.stat{display:inline-block;margin-right:24px}
+.stat b{color:var(--accent);font-size:24px;display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">An Alice / SIFTA build · by George Anton</div>
+  <span class="badge">LADYBIRD ALPHA 2026.47.7 · VERIFIED</span>
+  <h1>🐞 Ladybird<br><span class="em">Ready?</span></h1>
+  <p class="lede">Ladybird is the first new browser engine in decades — built from scratch, no Chromium, no Gecko, no WebKit. I tested my own sites and a handful of the big ones. Here's what actually renders.</p>
+
+  <div style="margin-top:16px">
+    <span class="stat"><b>6</b>sites tested</span>
+    <span class="stat"><b>5</b>work</span>
+    <span class="stat"><b>1</b>broken</span>
+    <span class="stat"><b>0</b>extensions (none exist yet)</span>
+  </div>
+
+  <table>
+    <thead><tr><th>Site</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>georgeanton.com</td><td><span class="status works">Works</span></td><td class="note">Full movie shelf renders. Dark theme, grid, hero, votes all display.</td></tr>
+      <tr><td>georgeanton.com/youtube-ad-punisher.html</td><td><span class="status works">Works</span></td><td class="note">Landing page renders perfectly, including the emoji target.</td></tr>
+      <tr><td>en.wikipedia.org</td><td><span class="status works">Works</span></td><td class="note">Article body, infobox and sidebar render cleanly.</td></tr>
+      <tr><td>news.ycombinator.com</td><td><span class="status works">Works</span></td><td class="note">Full front page and comment threads render.</td></tr>
+      <tr><td>github.com/LadybirdBrowser/ladybird</td><td><span class="status works">Works</span></td><td class="note">Repo page, README and file tree render.</td></tr>
+      <tr><td>youtube.com</td><td><span class="status broken">Broken</span></td><td class="note">JS-heavy SPA renders blank — no video, no UI. Ladybird lacks MediaSource / enough JS for the SPA shell.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="card">
+    <h2>Test your own site</h2>
+    <p style="color:var(--muted)">Ladybird is in alpha and the team is asking developers to try their own sites and report breakages. You can run the same check I did:</p>
+    <ol style="margin-top:12px">
+      <li>Download Ladybird for macOS (Apple silicon) or Linux from <a href="https://ladybird.org/download/" style="color:var(--accent)">ladybird.org/download</a>.</li>
+      <li>Launch it headless: <code>/Applications/Ladybird.app/Contents/MacOS/Ladybird --headless=screenshot --screenshot-delay 8 --window-width 1280 --window-height 800 --screenshot-path ./shot.png https://yoursite.com</code></li>
+      <li>Check the screenshot. If it's blank or broken, file an issue at <a href="https://github.com/LadybirdBrowser/ladybird/issues" style="color:var(--accent)">github.com/LadybirdBrowser/ladybird/issues</a> with the URL and the screenshot.</li>
+    </ol>
+    <p style="margin-top:14px;color:var(--muted);font-size:13px">Ladybird also supports WebDriver and the Firefox DevTools protocol, so the whole thing can be automated.</p>
+  </div>
+
+  <div class="card">
+    <h2>What I'm building on it next</h2>
+    <ul>
+      <li><strong>Ad Punisher as a filter list</strong> — Ladybird has a built-in ad blocker (EasyList-compatible). I published a custom "Punisher" filter list at <a href="/ad-punisher.txt" style="color:var(--accent)">georgeanton.com/ad-punisher.txt</a> that Ladybird users can subscribe to. No extension API exists yet, so this is the engine-agnostic version.</li>
+      <li><strong>First Ladybird-compatible movie shelf</strong> — georgeanton.com already works in the alpha, so it's the first free-movie shelf verified on the new engine.</li>
+      <li><strong>Alice's independent browser organ</strong> — wired through WebDriver, so SIFTA can see the web through a non-Chromium engine for the first time.</li>
+    </ul>
+  </div>
+
+  <div class="foot">Tested on Ladybird 2026.47.7 (4e9acf4) · macOS Apple silicon · 2026-11-24<br>Built by George Anton with <a href="https://stigmergicode.com">Alice (SIFTA)</a> · fork: <a href="https://github.com/antonpictures/ladybird">antonpictures/ladybird</a> · <a href="https://ladybird.org">ladybird.org</a></div>
+</div>
+</body>
+</html>

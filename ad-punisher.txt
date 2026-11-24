@@ -1,0 +1,49 @@
+! Title: Georgeanton Ad Punisher — Ladybird / EasyList-compatible
+! Description: A small starter filter list for Ladybird's built-in content blocker.
+!              Ladybird has no extension API yet, so this is the engine-agnostic
+!              version of the YouTube Ad Punisher idea: block the ad and tracker
+!              domains instead of reloading. Subscribe at:
+!              https://georgeanton.com/ad-punisher.txt
+! Homepage: https://georgeanton.com/youtube-ad-punisher.html
+! Expires: 1 day
+! Last modified: 2026-11-24
+
+! === Common ad & tracker domains ===
+||doubleclick.net^
+||googlesyndication.com^
+||googleadservices.com^
+||google-analytics.com^
+||googletagmanager.com^
+||googletagservices.com^
+||facebook.net^/fbevents.js
+||facebook.com^/tr
+||connect.facebook.net^
+||amazon-adsystem.com^
+||adnxs.com^
+||adsrvr.org^
+||criteo.com^
+||criteo.net^
+||outbrain.com^
+||taboola.com^
+||scorecardresearch.com^
+||quantserve.com^
+||moatads.com^
+||adsafeprotected.com^
+
+! === YouTube ad endpoints (best-effort; YouTube rotates these) ===
+||youtube.com/api/stats/ads^
+||youtube.com/pagead/^
+||youtube.com/ptracking^
+||youtube.com/get_video_info*ad^
+||s.youtube.com/api/stats/qoe^
+
+! === Cosmetic: hide YouTube ad containers ===
+youtube.com##.ad-showing
+youtube.com##.ytp-ad-module
+youtube.com##.ytp-ad-overlay-container
+youtube.com##.video-ads
+youtube.com##ytd-display-ad-renderer
+youtube.com##ytd-promoted-sparkles-web-renderer
+youtube.com##ytd-banner-promo-renderer
+
+! === End of list ===
