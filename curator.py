@@ -100,6 +100,7 @@ class Movie:
     region_checked: float = 0.0
     poster: str | None = None
     views: int = 0
+    pinned: bool = False   # owner-pinned: always sorts to top of the shelf
 
 
 # === plumbing =============================================================
@@ -580,7 +581,7 @@ def dedupe(cat: dict[str, Movie]) -> int:
 def save(cat: dict[str, Movie]) -> None:
     dedupe(cat)
     rows = [asdict(m) for m in cat.values()]
-    rows.sort(key=lambda m: (-(m.get("year") or 0), m["title"].lower()))
+    rows.sort(key=lambda m: (0 if m.get("pinned") else 1, -(m.get("year") or 0), m["title"].lower()))
     CATALOG.write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
