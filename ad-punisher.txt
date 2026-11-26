@@ -46,4 +46,9 @@ youtube.com##ytd-display-ad-renderer
 youtube.com##ytd-promoted-sparkles-web-renderer
 youtube.com##ytd-banner-promo-renderer
 
+! === Anti-adblock nags (from HN thread, stanac) ===
+! Kills the "Experiencing Interruptions?" popup caused by ad blockers.
+! Note: may also hide other toast messages like "Queue cleared" — acceptable trade-off.
+www.youtube.com##.snackbarViewModelEngagementBarWrapper
+
 ! === End of list ===
