@@ -53,7 +53,7 @@ def catalog_payload() -> dict:
         rows = json.loads(CATALOG.read_text(encoding="utf-8"))
     except Exception:  # noqa: BLE001
         rows = []
-    rows.sort(key=lambda m: (-(m.get("year") or 0), -(m.get("added_at") or 0)))
+    rows.sort(key=lambda m: (0 if m.get("pinned") else 1, -(m.get("year") or 0), -(m.get("added_at") or 0)))
     sources = len({m.get("source") for m in rows if m.get("source")})
     return {
         "movies": rows,

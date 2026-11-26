@@ -230,7 +230,7 @@ function visible(m){ return m.status !== 'removed'; }
 
 function pickFeatured(){
   const ok = CAT.filter(m => playable(m) && m.status !== 'fake');
-  ok.sort((a,b) => (b.year||0)-(a.year||0) || (b.added_at||0)-(a.added_at||0));
+  ok.sort((a,b) => (a.pinned?0:1)-(b.pinned?0:1) || (b.year||0)-(a.year||0) || (b.added_at||0)-(a.added_at||0));
   return ok.slice(0, 12);
 }
 
@@ -283,7 +283,8 @@ function filtered(){
     const v = (VOTES.votes||{})[m.id] || {ok:0,fake:0};
     return (v.ok||0) - (v.fake||0)*1000;
   };
-  rows.sort((a,b) => score(b)-score(a)
+  rows.sort((a,b) => (a.pinned?0:1)-(b.pinned?0:1)
+    || score(b)-score(a)
     || (b.year||0)-(a.year||0) || (b.added_at||0)-(a.added_at||0)
     || a.title.localeCompare(b.title));
   return rows;
